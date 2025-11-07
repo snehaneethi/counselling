@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Snehaneethi Counselling</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .admin-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 100px var(--spacing-md) var(--spacing-xl);
+      }
+
+      .admin-header {
+        background: var(--color-beige);
+        padding: var(--spacing-lg);
+        border-radius: 15px;
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+      }
+
+      .admin-header h1 {
+        color: var(--color-teal);
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .admin-nav {
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: center;
+        margin-bottom: var(--spacing-lg);
+        flex-wrap: wrap;
+      }
+
+      .admin-nav button {
+        padding: 12px 24px;
+        border: 2px solid var(--color-teal);
+        background: white;
+        color: var(--color-teal);
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: var(--transition);
+      }
+
+      .admin-nav button.active {
+        background: var(--color-teal);
+        color: white;
+      }
+
+      .admin-nav button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(74, 155, 155, 0.3);
+      }
+
+      .admin-section {
+        display: none;
+        background: white;
+        padding: var(--spacing-lg);
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .admin-section.active {
+        display: block;
+      }
+
+      .date-filter {
+        display: flex;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .date-filter input {
+        padding: 10px 16px;
+        border: 2px solid var(--color-border);
+        border-radius: 8px;
+        font-family: var(--font-body);
+      }
+
+      .date-filter button {
+        padding: 10px 20px;
+        background: var(--color-teal);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .bookings-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: var(--spacing-md);
+      }
+
+      .bookings-table th,
+      .bookings-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .bookings-table th {
+        background: var(--color-beige);
+        color: var(--color-teal);
+        font-weight: 600;
+      }
+
+      .bookings-table tr:hover {
+        background: var(--color-beige);
+      }
+
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .status-pending {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .status-confirmed {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .status-completed {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+
+      .status-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: var(--spacing-xs);
+      }
+
+      .action-btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: var(--transition);
+      }
+
+      .btn-confirm {
+        background: #28a745;
+        color: white;
+      }
+
+      .btn-cancel {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-complete {
+        background: #17a2b8;
+        color: white;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .stat-card {
+        background: white;
+        padding: var(--spacing-md);
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        text-align: center;
+      }
+
+      .stat-card h3 {
+        font-size: 2rem;
+        color: var(--color-teal);
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .stat-card p {
+        color: var(--color-text-light);
+        margin: 0;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: var(--spacing-xl);
+        color: var(--color-text-light);
+      }
+
+      .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: var(--spacing-md);
+      }
+
+      .feedback-item {
+        background: var(--color-beige);
+        padding: var(--spacing-md);
+        border-radius: 10px;
+        margin-bottom: var(--spacing-md);
+      }
+
+      .feedback-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .feedback-author {
+        font-weight: 600;
+        color: var(--color-teal);
+      }
+
+      .feedback-location {
+        color: var(--color-text-light);
+        font-size: 0.9rem;
+      }
+
+      .feedback-actions {
+        display: flex;
+        gap: var(--spacing-xs);
+      }
+
+      .btn-approve {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+
+      .btn-reject {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 768px) {
+        .bookings-table {
+          font-size: 0.85rem;
+        }
+
+        .bookings-table th,
+        .bookings-table td {
+          padding: 8px;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="main-header" id="main-header">
+      <nav class="navbar">
+        <div class="container">
+          <div class="nav-brand">
+            <h1>Snehaneethi</h1>
+            <span class="tagline">Admin Dashboard</span>
+          </div>
+          <a href="index.html" class="btn btn-outline">Back to Website</a>
+        </div>
+      </nav>
+    </header>
+
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <p>Manage bookings, view feedback, and monitor daily operations</p>
+      </div>
+
+      <div class="admin-nav">
+        <button class="nav-tab active" data-tab="today">Today's Bookings</button>
+        <button class="nav-tab" data-tab="all">All Bookings</button>
+        <button class="nav-tab" data-tab="feedback">Pending Feedback</button>
+        <button class="nav-tab" data-tab="messages">Messages</button>
+      </div>
+
+      <!-- Today's Bookings -->
+      <div id="today-section" class="admin-section active">
+        <h2>Today's Bookings</h2>
+        <div class="stats-grid" id="today-stats"></div>
+        <div id="today-bookings"></div>
+      </div>
+
+      <!-- All Bookings -->
+      <div id="all-section" class="admin-section">
+        <h2>All Bookings</h2>
+        <div class="date-filter">
+          <label>
+            <strong>Filter by Date:</strong>
+            <input type="date" id="filter-date" />
+          </label>
+          <button onclick="filterBookingsByDate()">Filter</button>
+          <button onclick="showAllBookings()">Show All</button>
+        </div>
+        <div id="all-bookings"></div>
+      </div>
+
+      <!-- Pending Feedback -->
+      <div id="feedback-section" class="admin-section">
+        <h2>Pending Feedback Reviews</h2>
+        <div id="pending-feedback"></div>
+      </div>
+
+      <!-- Messages -->
+      <div id="messages-section" class="admin-section">
+        <h2>Contact Messages</h2>
+        <div id="contact-messages"></div>
+      </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+  </body>
+</html>
+
